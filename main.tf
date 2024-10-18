@@ -38,10 +38,11 @@ resource "aws_internet_gateway" "main" {
   )
 }
 resource "aws_subnet" "private" {
-    count = length(var.private_subnet_cidrs)
+  count = length(var.private_subnet_cidrs)
   vpc_id     = aws_vpc.main.id
   cidr_block = var.private_subnet_cidrs[count.index]
   availability_zone = local.az_name[count.index]
+  
   tags = merge (
     var.common_tags,
     var.private_subnet_tags,
@@ -51,7 +52,7 @@ resource "aws_subnet" "private" {
   )
 }
 resource "aws_subnet" "database" {
-    count = length(var.database_subnet_cidrs)
+  count = length(var.database_subnet_cidrs)
   vpc_id     = aws_vpc.main.id
   cidr_block = var.database_subnet_cidrs[count.index]
   availability_zone = local.az_name[count.index]
@@ -65,8 +66,8 @@ resource "aws_subnet" "database" {
 }
 # db subnet group ID for RDS
 resource "aws_db_subnet_group" "default" {
+  
   name       = local.resource_name
-
   subnet_ids = aws_subnet.database[*].id
 
   tags = merge (
@@ -79,12 +80,13 @@ resource "aws_db_subnet_group" "default" {
 }
   resource "aws_eip" "nat" {
   domain   = "vpc"
-  tags =merge (
-    {
-    Name = "${local.resource_name}-EIP" 
   }
-  )
-}
+  # tags =merge (
+  #   {
+  #   Name = "${local.resource_name}-EIP" 
+  # }
+  # )
+
 resource "aws_nat_gateway" "main" {
   allocation_id = aws_eip.nat.id
   subnet_id = aws_subnet.public[0].id

@@ -4,11 +4,12 @@ variable "project_name" {
 variable "environment"{
     type = string
 }
-variable "vpc_cidr" {
-default = "10.0.0.0/16"
-}
+
 variable "enable_dns_hostnames"{
     default = true
+}
+variable "vpc_cidr"{
+     default ="10.0.0.0/16"
 }
 variable "common_tags"{
 default = {}
@@ -66,7 +67,7 @@ variable "public_route_table_tags"{
   }
   variable "is_peering_required"{
   type = bool
-  default =false
+  default = false
  }
  variable "vpc_peering_tags"{
     default = {}
